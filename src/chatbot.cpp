@@ -33,7 +33,6 @@ ChatBot::ChatBot(std::string filename)
 ChatBot::~ChatBot()
 {
     std::cout << "ChatBot Destructor" << std::endl;
-
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
@@ -44,6 +43,69 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+// Copy constructor 
+ChatBot::ChatBot(const ChatBot& source)
+{
+  	std::cout<< "Chatbot Copy Constructor." << std::endl;
+    _image = new wxBitmap(*source._image);
+  	_currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+}
+
+// Copy assignment constructor
+ChatBot& ChatBot::operator=(const ChatBot& source)
+{
+  	std::cout<< "Chatbot Copy assignment Constructor." << std::endl;
+  	if (this != &source)
+  	{
+      if (_image!=NULL)
+        delete _image;
+      _image = new wxBitmap(*source._image);
+      _currentNode = source._currentNode;
+      _rootNode = source._rootNode;
+      _chatLogic = source._chatLogic;
+  	}
+  	return *this;
+}
+
+// Move constructor
+ChatBot::ChatBot(ChatBot&& source)
+{	
+  	std::cout<< "Chatbot Move Constructor." << std::endl;
+    _image = new wxBitmap(*source._image);
+  	*_currentNode = *source._currentNode;
+    *_rootNode = *source._rootNode;
+    *_chatLogic = *source._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+  
+  	source._image = NULL;
+  	source._currentNode = nullptr;
+  	source._rootNode = nullptr;
+  	source._chatLogic = nullptr;
+}
+
+// Move assignment constructor
+ChatBot& ChatBot::operator=(ChatBot&& source)
+{	
+  	std::cout<< "Chatbot Move assignment Constructor." << std::endl;
+	if (this != &source)
+    {
+      if (_image!=NULL)
+        delete _image;
+      _image = new wxBitmap(*source._image);
+      *_currentNode = *source._currentNode;
+      *_rootNode = *source._rootNode;
+      *_chatLogic = *source._chatLogic;
+      _chatLogic->SetChatbotHandle(this);
+
+      source._image = NULL;
+      source._currentNode = nullptr;
+      source._rootNode = nullptr;
+      source._chatLogic = nullptr;
+    }
+  	return *this;
+}
 
 ////
 //// EOF STUDENT CODE
